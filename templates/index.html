@@ -1,0 +1,140 @@
+
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Presidential Countdown</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127859074-3"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('require', 'linkid');
+      gtag('config', 'UA-127859074-3');
+    </script>
+    
+
+    <style>
+    h1{
+        font-family: 'Open Sans', sans-serif;
+        font-size: 42px;
+        text-align: center;
+        font-kerning: all;
+        margin-top: 10%;
+    }
+    h4{
+      text-align: center;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 16px;
+    }
+    h3{
+      text-align: center;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 18px;
+    }
+
+    .loader {
+        style="
+        margin: auto;
+        position:fixed;
+        vertical-align: middle;
+        left: 50vw;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #a0a0a0;
+        border-radius: 50%;
+        width: 32px;
+        line-height: 1;
+        height: 32px;
+        animation: spin .5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+
+    </style>
+
+</head>
+<body>
+
+    <script>
+      $(document).ready(function(){
+              if ( '{{ country }}' == 'US' ){
+                $('#locationspecific').text('Polls in {{ city }}, {{ state }}  may close earlier.');
+              } 
+              else if ( '{{ country }}' != '' ){
+                $('#locationspecific').text(`Sorry {{ city }}, its almost over...` );
+              }
+              else {
+                $('#locationspecific').text('Sorry, its almost over...');
+
+              }
+            }
+        
+          );
+
+        $(document).ready(
+         function() {
+           $.ajax({
+              type: 'GET',
+              url: `${'/tweets'}`,
+
+              beforeSend: function(xhr){
+                $('#tweets').html('<div class="loader"> </div>');
+              },
+
+              success: function(msg){
+                $('#tweets').html(msg);
+              }
+            
+
+
+          //
+     }, 0);  //Delay here = 10.0 seconds 
+    });
+
+
+        $(document).ready(
+         function() {
+         setInterval(function() {
+            var dt = new Date();
+            var end = new Date( '{{ humanDT }}' );
+            var d = Math.abs(end-dt)/1000;
+            var days = Math.floor(d/86400);
+            var hours= Math.floor((d % 86400)/3600);
+            var mins = Math.floor((d % 86400 )/3600 %1 * 60 );
+            var secs = Math.floor(((d % 86400 )/3600 %1 * 60 ) % 1 * 60 );
+          $('#timestring').text(days +" days "+hours+" hours "+mins+" minutes "+ secs +" seconds");
+          //
+     }, 1000);  //Delay here = 1.0 seconds 
+    });
+
+        
+    </script>
+<div style="max-width: 900px; margin-left: 8vw; 
+        margin: 0 auto;
+        padding: 5px; 
+        horizaontal-align: middle;" >  
+  <h1>
+      The {{ electionYear }} presidential election will be over in <br>
+      <div id="timestring">{{ days }} days {{ hours }} hours {{ mins }} minutes {{ secs }} seconds</div> 
+  </h1>
+  <h4>
+  (Polls in Alaska close {{ humanDT }})
+  </h4>
+  <h3> 
+  <div id="locationspecific">
+  </h3>
+  <br><br>
+<div id="tweets" style = "horizaontal-align: middle;"></div>
+</body>
+
+</html>
+
+<!-- Thanks for the interest, find me at rubenstein.ian@gmail.com  -->

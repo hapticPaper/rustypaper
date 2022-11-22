@@ -1,0 +1,6 @@
+google-cloud-bigquery
+Flask
+requests
+google-auth
+pandas
+gunicorn

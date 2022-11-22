@@ -1,0 +1,23 @@
+<html>
+
+<head>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</head>
+
+
+
+<body>
+<div style="width: 498px;
+        margin: 0 auto;
+        padding: 0px;
+        horizaontal-align: middle;">
+    {% for t in tweets %}
+    <blockquote class="twitter-tweet">
+    <p lang="und" dir="ltr">
+    </p>&mdash; {{ t[2] }} (@{{ t[1]}}) 
+    <a href="https://twitter.com/realDonaldTrump/status/{{ t[0] }}"></a>
+    </blockquote> 
+    {% endfor %}
+</div>
+</body>
+</html>

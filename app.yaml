@@ -1,0 +1,12 @@
+runtime: python37
+
+
+handlers:
+- url: /templates
+  static_files: templates/index.html
+  upload: templates/index.html
+  secure: always
+
+- url: /(.*)
+  script: auto
+  secure: always
