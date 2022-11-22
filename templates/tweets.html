@@ -14,8 +14,7 @@
     {% for t in tweets %}
     <blockquote class="twitter-tweet">
     <p lang="und" dir="ltr">
-    </p>&mdash; {{ t[2] }} (@{{ t[1]}}) 
-    <a href="https://twitter.com/realDonaldTrump/status/{{ t[0] }}"></a>
+    </p>&mdash; {{ t[2] }} (@{{ t[1]}}):<br>  {{ t[3] }} <hr>
     </blockquote> 
     {% endfor %}
 </div>

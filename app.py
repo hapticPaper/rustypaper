@@ -26,7 +26,7 @@ class saClient:
 
 app = Flask(__name__)
 
-SAC = saClient('private/rusty-dt-1334bbf3b048.json', ['https://www.googleapis.com/auth/bigquery'])
+SAC = saClient(os.path.join('.secrets','googleSA.json'), ['https://www.googleapis.com/auth/bigquery'])
 bigquery_client = bigquery.client.Client(project='rusty-dt', credentials=SAC.creds())
 
 def readFile(file):
@@ -39,7 +39,7 @@ def readFile(file):
         return
 
 
-TW_BEARER = readFile('private/twitter.bearer')
+TW_BEARER = readFile(os.path.join('.secrets', 'twitter.bearer'))
 
 
 getNextElection = """
@@ -80,7 +80,7 @@ def searchTweets(p):
 			content=response))
 		#print(response.content)
 		tweets = json.loads(response.content)
-		return pandas.DataFrame([[t['id'], t['user']['screen_name'], t['user']['name']] for t in tweets['statuses']], columns=['id', 'screen_name','name'])
+		return pandas.DataFrame([[t['id'], t['user']['screen_name'], t['user']['name'], t['text']] for t in tweets['statuses']], columns=['id', 'screen_name','name','text'])
 		
 	except requests.exceptions.RequestException as e:
 		print(e)
@@ -105,9 +105,10 @@ def tweets():
 	allTweets = allTweets.drop_duplicates(subset='id')
 	ids = allTweets.id.to_list()
 	names = allTweets.name.to_list()
+	text = allTweets.text.to_list()
 	screen_names = allTweets.screen_name.to_list()
-	data = list(zip(ids, screen_names, names))
-	return render_template('/tweets.html', tweets =data)
+	data = list(zip(ids, screen_names, names, text))
+	return render_template('/tweets.html', tweets = data)
 
 @app.route('/')
 def main():
