@@ -3,7 +3,7 @@ try:
   googleclouddebugger.enable()
 except ImportError:
   pass
-import os, requests, json, pandas
+import os, requests, json, pandas, re
 from math import floor
 from multiprocessing import Pool
 from time import time
@@ -105,9 +105,9 @@ def tweets():
 	allTweets = allTweets.drop_duplicates(subset='id')
 	ids = allTweets.id.to_list()
 	names = allTweets.name.to_list()
-	text = allTweets.text.to_list()
-	screen_names = allTweets.screen_name.to_list()
-	data = list(zip(ids, screen_names, names, text))
+	text = [re.sub('https://.*','',t) for t in allTweets.text.to_list()]
+	screen_names, urls, profiles = zip(*[[screen_name, f"https://twitter.com/{screen_name}/status/{ids[_]}", f"https://twitter.com/{screen_name}"] for _,screen_name in enumerate(allTweets.screen_name.to_list())])
+	data = list(zip(ids, screen_names, names, text, urls, profiles))
 	return render_template('/tweets.html', tweets = data)
 
 @app.route('/')
